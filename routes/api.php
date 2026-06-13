@@ -17,4 +17,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/payment-requests', [PaymentRequestController::class, 'store']);
     Route::get('/payment-requests', [PaymentRequestController::class, 'index']);
     Route::get('/payment-requests/{id}', [PaymentRequestController::class, 'show']);
+    Route::patch('/payment-requests/{id}/approve', [PaymentRequestController::class, 'approve']);
+    Route::patch('/payment-requests/{id}/reject', [PaymentRequestController::class, 'reject']);
 });

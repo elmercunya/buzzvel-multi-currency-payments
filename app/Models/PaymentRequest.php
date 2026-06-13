@@ -10,13 +10,17 @@ class PaymentRequest extends Model
         'user_id',
         'amount_local',
         'currency_code',
-        'reason',
         'exchange_rate_eur_to_local',
         'amount_eur',
         'exchange_rate_source',
         'exchange_rate_fetched_at',
         'status',
-        'expires_at'
+        'reason',
+        'finance_comment',
+        'approved_by',
+        'expires_at',
+        'approved_at',
+        'rejected_at'
     ];
 
     public function user() {

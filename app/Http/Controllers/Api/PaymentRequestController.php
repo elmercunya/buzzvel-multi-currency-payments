@@ -71,4 +71,62 @@ class PaymentRequestController extends Controller
             'paymentRequest' => $paymentRequest
         ]);
     }
+
+    public function approve(Request $request, $id) {
+
+        if($request->user()->role !== 'finance') {
+            return response()->json([
+                'message' => 'No tienes acceso a este recurso'
+            ], 403);
+        }
+
+        $paymentRequest = PaymentRequest::findOrFail($id);
+
+        if($paymentRequest->status !== 'pending') {
+            return response()->json([
+                'message' => 'Solo se pueden aprobar solicitudes pendientes'
+            ], 422);
+        }
+
+        $paymentRequest->update([
+            'status' => 'approved',
+            'finance_comment' => $request->finance_comment,
+            'approved_by' => $request->user()->id,
+            'approved_at' => Carbon::now(),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Solicitud aprobada',
+            'paymentRequest' => $paymentRequest
+        ]);
+    }
+
+    public function reject(Request $request, $id) {
+        if($request->user()->role !== 'finance') {
+            return response()->json([
+                'message' => 'No tienes acceso a este recurso'
+            ], 403);
+        }
+
+        $paymentRequest = PaymentRequest::findOrFail($id);
+
+        if($paymentRequest->status !== 'pending') {
+            return response()->json([
+                'message' => 'Solo se pueden rechazar solicitudes pendientes'
+            ], 422);
+        }
+
+        $paymentRequest->update([
+            'status' => 'rejected',
+            'finance_comment' => $request->finance_comment,
+            'rejected_at' => Carbon::now(),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Solicitud desaprobada',
+            'paymentRequest' => $paymentRequest
+        ]);
+    }
 }
